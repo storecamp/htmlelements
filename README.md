@@ -24,7 +24,7 @@ tests/
 Via Composer
 
 ``` bash
-$ composer require https://github.com/nilsenj/storecamp/htmlelements
+$ composer require https://github.com/storecamp/htmlelements
 ```
 
 ## Usage
