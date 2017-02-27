@@ -24,7 +24,10 @@
     "autoload": {
         "psr-4": {
             "storecamp\\htmlelements\\": "src"
-        }
+        },
+        "files": [
+            "src/helpers/activenav-helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

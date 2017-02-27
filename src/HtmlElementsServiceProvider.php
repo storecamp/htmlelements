@@ -16,7 +16,9 @@ class HtmlElementsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/views', 'elements');
+        $this->loadViewsFrom(__DIR__ . '/views', 'elements');
+        include __DIR__.'/helpers/activenav-helpers.php';
+
 //        $this->publishes([
 //            __DIR__.'/views' => resource_path('views/vendor/htmlelements'),
 //        ]);
