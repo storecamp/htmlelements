@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Collective\Html\HtmlBuilder;
 use storecamp\htmlelements\Bridges\Config\Laravel5Config;
 use storecamp\htmlelements\Facades\Menu;
+use Illuminate\Foundation\Application;
+use Illuminate\Routing\Events\RouteMatched;
 
 class HtmlElementsServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,7 @@ class HtmlElementsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadViewsFrom(__DIR__ . '/views', 'elements');
+        $this->bootActive();
         include __DIR__.'/helpers/activenav-helpers.php';
 
 //        $this->publishes([
@@ -43,6 +46,8 @@ class HtmlElementsServiceProvider extends ServiceProvider
             __DIR__ . '/config/htmlelements.php',
             'htmlelements'
         );
+
+        $this->registerActive();
         $this->registerMenu();
         $this->registerAccordion();
         $this->registerAlert();
@@ -70,6 +75,36 @@ class HtmlElementsServiceProvider extends ServiceProvider
         $this->registerTable();
         $this->registerThumbnail();
 
+    }
+
+    private function bootActive() {
+        // Update the instances each time a request is resolved and a route is matched
+        $instance = app('active');
+        if (version_compare(Application::VERSION, '5.2.0', '>=')) {
+            app('router')->matched(
+                function (RouteMatched $event) use ($instance) {
+                    $instance->updateInstances($event->route, $event->request);
+                }
+            );
+        } else {
+            app('router')->matched(
+                function ($route, $request) use ($instance) {
+                    $instance->updateInstances($route, $request);
+                }
+            );
+        }
+    }
+
+    private function registerActive() {
+        $this->app->singleton(
+            'active',
+            function ($app) {
+
+                $instance = new Active($app['router']->getCurrentRequest());
+
+                return $instance;
+            }
+        );
     }
 
     private function registerMenu() {
