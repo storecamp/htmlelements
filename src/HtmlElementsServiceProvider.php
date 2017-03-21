@@ -263,7 +263,7 @@ class HtmlElementsServiceProvider extends ServiceProvider
                     $app->make('collective::html'),
                     $app->make('url'),
                     $app->make('view'),
-                    $app['session.store']->getToken()
+                    $app['session.store']->token()
                 );
 
                 return $form->setSessionStore($app['session.store']);
